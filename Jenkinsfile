@@ -22,7 +22,7 @@ pipeline {
                 sh '''
                 pwd
                 echo Global Test var: $Test
-                sleep(10)"
+                sleep(10)
                 '''
              }
              
