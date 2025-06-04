@@ -1,12 +1,12 @@
-pipeline{
+pipeline {
     agent any
 
-    environment{
+    environment {
         Test = 'test_new'
     }
 
-    stages{
-        stage('Build'){
+    stages {
+        stage('Build') {
              environment{
                 Stage_test='test_env'
              }
@@ -16,7 +16,7 @@ pipeline{
              
         }
 
-        stage('Test'){
+        stage('Test') {
              steps {
                 sh '''
                 #!/bin/bash
