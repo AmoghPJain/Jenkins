@@ -12,6 +12,7 @@ pipeline{
              }
              steps {
                 sh '''
+                #!/bin/bash
                 sleep(10)
                 echo "Local Environment variable Stage_test: $Stage_test"
                 '''
@@ -22,6 +23,7 @@ pipeline{
         stage('Test'){
              steps {
                 sh '''
+                #!/bin/bash
                 echo "Global Environment variable Test: $Test"
                 pwd
                 sleep(10)
