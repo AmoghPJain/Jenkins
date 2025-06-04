@@ -2,26 +2,31 @@ pipeline {
     agent any
 
     environment {
-        Test = 'test_new'
+        TEST = 'test_value'
+        TEST1 = 'test_value1'
     }
 
     stages {
         stage('Build') {
-             environment{
-                Stage_test='test_env'
-             }
              steps {
+                sh '''
                 echo "Entering Build stage"
-                sleep(10)
+                echo $TEST
+                echo $TEST1
+                sleep 10
+                '''
              }
              
         }
 
         stage('Test') {
+            environment {
+                LTEST = 'ltest_value'
+            }
              steps {
                 sh '''
                 pwd
-                echo Global Test var: $Test
+                echo Local and Global Test var: $LTEST $TEST
                 sleep 10
                 '''
              }
