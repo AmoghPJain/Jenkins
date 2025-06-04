@@ -11,6 +11,7 @@ pipeline {
                 Stage_test='test_env'
              }
              steps {
+                echo "Entering Build stage"
                 sleep(10)
              }
              
