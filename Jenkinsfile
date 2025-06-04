@@ -18,11 +18,7 @@ pipeline {
 
         stage('Test') {
              steps {
-                sh '''
                 sh 'bash -c "pwd; echo Global Test var: $Test; sleep 10"'
-                pwd
-                sleep(10)
-                ''' 
              }
              
         }
