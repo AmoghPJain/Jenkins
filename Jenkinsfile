@@ -6,6 +6,11 @@ pipeline {
         TEST1 = 'test_value1'
     }
 
+    parameters {
+        string(name: 'Job_name', defaultValue: 'First_job', description: 'sample string parameter')
+        booleanParam(name: 'Status', defaultValue: true, description: 'sample boolean parameter')
+    }
+
     stages {
         stage('Build') {
              steps {
