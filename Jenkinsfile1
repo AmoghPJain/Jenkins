@@ -6,7 +6,7 @@ pipeline{
             steps {
                 script{
                     checkout(
-                        changelog false,
+                        changelog: false,
                         scm:scmGit(
                             branches: [[name: 'main']],
                             userRemoteConfigs: [[
