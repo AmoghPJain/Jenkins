@@ -2,10 +2,10 @@ pipeline{
     agent any
 
     parameters {
-        boolean(name: 'Cleanup', defaultValue: false, description: 'Delete workspace before build')
-        boolean(name: 'Fail', defaultValue: false, description: 'Fail scenario')
-        boolean(name: 'Checkout', defaultValue: true, description: 'code checkout stage')
-        boolean(name: 'Build', defaultValue: true, description: 'Build stage')
+        booleanParam(name: 'CLEANUP', defaultValue: false, description: 'Delete workspace before build')
+        booleanParam(name: 'FAIL', defaultValue: false, description: 'Fail scenario')
+        booleanParam(name: 'CHECKOUT', defaultValue: true, description: 'code checkout stage')
+        booleanParam(name: 'BUILD', defaultValue: true, description: 'Build stage')
         
     }
 
@@ -13,7 +13,7 @@ pipeline{
         stage('Cleanup'){
             when {
                 expression { 
-                    params.Cleanup == true
+                    params.CLEANUP == true
                     } // Only run this stage if Cleanup parameter is true
             }
             steps {
@@ -25,7 +25,7 @@ pipeline{
         stage('Fail'){
             when {
                 expression { 
-                    params.Fail == true
+                    params.FAIL == true
                     } // Only run this stage if Fail parameter is true
             }
             steps {
@@ -33,7 +33,7 @@ pipeline{
                     sh '''
                         sleep 10
                         echo "Simulating an error..."
-                        exit 1 // This will cause the stage to fail, but the pipeline will continue
+                        exit 1 # This will cause the stage to fail, but the pipeline will continue
                     '''
                 }
             }
@@ -41,7 +41,7 @@ pipeline{
         stage('Checkout') {
             when {
                 expression { 
-                    params.Checkout == true
+                    params.CHECKOUT == true
                     } // Only run this stage if Checkout parameter is true
             }
             steps {
@@ -62,7 +62,7 @@ pipeline{
         stage('Build') {
             when{
                 expression { 
-                    params.Build == true
+                    params.BUILD == true
                     } // Only run this stage if Build parameter is true
             }
             steps {
