@@ -1,15 +1,33 @@
 pipeline{
     agent any
 
-    stages {
-        // stage('Cleanup'){
-        //     steps {
-        //         deleteDir() // Cleans the workspace before starting the build
-        //         echo 'Workspace cleaned up'
-        //     }
-        // }
+    parameters {
+        boolean(name: 'Cleanup', defaultValue: false, description: 'Delete workspace before build')
+        boolean(name: 'Fail', defaultValue: false, description: 'Fail scenario')
+        boolean(name: 'Checkout', defaultValue: true, description: 'code checkout stage')
+        boolean(name: 'Build', defaultValue: true, description: 'Build stage')
+        
+    }
 
-        stage('catchError_test'){
+    stages {
+        stage('Cleanup'){
+            when {
+                expression { 
+                    params.Cleanup == true
+                    } // Only run this stage if Cleanup parameter is true
+            }
+            steps {
+                deleteDir() // Cleans the workspace before starting the build
+                echo 'Workspace cleaned up'
+            }
+        }
+
+        stage('Fail'){
+            when {
+                expression { 
+                    params.Fail == true
+                    } // Only run this stage if Fail parameter is true
+            }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh '''
@@ -20,7 +38,12 @@ pipeline{
                 }
             }
         }
-        stage('checkout') {
+        stage('Checkout') {
+            when {
+                expression { 
+                    params.Checkout == true
+                    } // Only run this stage if Checkout parameter is true
+            }
             steps {
                 checkout(
                     changelog: false,
@@ -37,6 +60,11 @@ pipeline{
         }
 
         stage('Build') {
+            when{
+                expression { 
+                    params.Build == true
+                    } // Only run this stage if Build parameter is true
+            }
             steps {
                 sh '''
                     echo "Building the project..."
