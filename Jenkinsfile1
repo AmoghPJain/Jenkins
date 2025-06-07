@@ -2,12 +2,13 @@ pipeline{
     agent any
 
     stages {
-        stage('Cleanup'){
-            steps {
-                deleteDir() // Cleans the workspace before starting the build
-                echo 'Workspace cleaned up'
-            }
-        }
+        // stage('Cleanup'){
+        //     steps {
+        //         deleteDir() // Cleans the workspace before starting the build
+        //         echo 'Workspace cleaned up'
+        //     }
+        // }
+
         stage('checkout') {
             steps {
                 checkout(
@@ -18,7 +19,7 @@ pipeline{
                             credentialsId: 'slave_ssh',
                             url: 'https://github.com/AmoghPJain/simple-java-maven-app.git' 
                            ]],
-                           extensions: [[$class: 'CloneOption', timeout: 60]]
+                           extensions: [[$class: 'CloneOption', timeout: 60]] // Clones the repository with a timeout of 60 seconds
                     ]
                     )
             }
@@ -30,6 +31,7 @@ pipeline{
                     echo "Building the project..."
                     pwd
                     ls -l
+                    mvn clean install
                 '''
             }
         }
