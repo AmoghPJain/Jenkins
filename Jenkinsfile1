@@ -31,7 +31,7 @@ pipeline{
                     echo "Building the project..."
                     pwd
                     ls -l
-                    mvn --version
+                    /opt/maven/bin/mvn --version
                     mvn clean install
                 '''
             }
