@@ -4,7 +4,17 @@ pipeline{
     stages {
         stage('Checkout'){
             steps {
-
+                checkout(
+                    changelog: false,
+                    scm: [$class: 'GitSCM',
+                        branches: [[name: 'master']],
+                        userRemoteConfigs: [[
+                            credentialsId: 'slave_ssh',
+                            url: 'https://github.com/AmoghPJain/simple-java-maven-app.git' 
+                           ]],
+                           extensions: [[$class: 'CloneOption', timeout: 60]] // Clones the repository with a timeout of 60 seconds
+                    ]
+                    )
             }
 
         stage('Test Multiple')
