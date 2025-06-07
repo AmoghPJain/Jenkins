@@ -4,7 +4,7 @@ pipeline{
     stages {
         stage('Cleanup'){
             steps {
-                deleteDir()
+                deleteDir() // Cleans the workspace before starting the build
                 echo 'Workspace cleaned up'
             }
         }
@@ -17,7 +17,8 @@ pipeline{
                         userRemoteConfigs: [[
                             credentialsId: 'slave_ssh',
                             url: 'https://github.com/AmoghPJain/simple-java-maven-app.git' 
-                           ]]
+                           ]],
+                           clean: true  // Ensures a fresh clone
                     ]
                     )
             }
