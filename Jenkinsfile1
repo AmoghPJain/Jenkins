@@ -9,6 +9,17 @@ pipeline{
         //     }
         // }
 
+        stage('catchError_test'){
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh '''
+                        sleep 10
+                        echo "Simulating an error..."
+                        exit 1 // This will cause the stage to fail, but the pipeline will continue
+                    '''
+                }
+            }
+        }
         stage('checkout') {
             steps {
                 checkout(
