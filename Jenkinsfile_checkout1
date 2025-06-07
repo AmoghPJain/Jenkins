@@ -1,0 +1,22 @@
+pipeline{
+    agent any
+
+    stages {
+        stage('checkout') {
+            steps {
+                script{
+                    checkout(
+                        changelog: false,
+                        scm:scmGit(
+                            branches: [[name: 'main']],
+                            userRemoteConfigs: [[
+                                credentialsId: 'slave_ssh',
+                                 url: 'https://github.com/AmoghPJain/Jenkins.git'
+                                  ]]
+                             )
+                         )
+                }
+            }
+        }
+        }
+    }
