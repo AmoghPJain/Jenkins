@@ -10,7 +10,7 @@ pipeline{
                         branches: [[name: 'main']],
                         userRemoteConfigs: [[
                             credentialsId: 'slave_ssh',
-                            url: 'https://github.com/AmoghPJain/Jenkins.git' 
+                            url: 'https://github.com/AmoghPJain/simple-java-maven-app.git' 
                            ]]
                     ]
                     )
