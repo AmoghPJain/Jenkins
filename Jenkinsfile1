@@ -13,12 +13,12 @@ pipeline{
                 checkout(
                     changelog: false,
                     scm: [$class: 'GitSCM',
-                        branches: [[name: 'main']],
+                        branches: [[name: 'master']],
                         userRemoteConfigs: [[
                             credentialsId: 'slave_ssh',
                             url: 'https://github.com/AmoghPJain/simple-java-maven-app.git' 
                            ]],
-                           clean: true  // Ensures a fresh clone
+                           extensions: [[$class: 'CloneOption', timeout: 60]]
                     ]
                     )
             }
