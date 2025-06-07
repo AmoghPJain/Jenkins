@@ -31,8 +31,8 @@ pipeline{
                     echo "Building the project..."
                     pwd
                     ls -l
-                    /opt/maven/bin/mvn --version
-                    /opt/maven/bin/mvn clean install
+                    mvn --version
+                    mvn clean install
                 '''
             }
         }
