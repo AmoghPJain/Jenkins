@@ -15,7 +15,8 @@ pipeline{
                            extensions: [[$class: 'CloneOption', timeout: 60]] // Clones the repository with a timeout of 60 seconds
                     ]
                     )
-            }}
+            }
+        }
 
         stage('Test Multiple')
         {
