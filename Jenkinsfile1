@@ -75,31 +75,5 @@ pipeline{
                 '''
             }
         }
-
-
-        stage('Test Multiple')
-        {
-            parallel {
-            stage ('Test1'){
-                steps {
-                    sh '''
-                        echo "Running Test1"
-                        sleep 10
-                    '''
-                }
-            }
-
-            stage ('Test2'){
-                steps {
-                    sh '''
-                        echo "Running Test2"
-                        sleep 10
-                    '''
-                }
-            }
-        }}
-
-
-        
-    }
+  }
 }    
