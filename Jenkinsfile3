@@ -10,6 +10,9 @@ pipeline{
                 withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]){
                     echo "$GIT_USERNAME"
                     echo "$GIT_PASSWORD"
+                    sh '''
+                        git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/AmoghPJain/Python.git
+                    '''
             }
             }
         }
