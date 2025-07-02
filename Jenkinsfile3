@@ -7,7 +7,7 @@ pipeline{
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                 // This is accessing credentials of type usernamePassword
-                withCredentials([usernamePassword(credentialsId: 'slave_ssh', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]){
+                withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]){
                     echo "$GIT_USERNAME"
                     echo "$GIT_PASSWORD"
             }
