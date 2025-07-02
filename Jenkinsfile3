@@ -5,7 +5,7 @@ pipeline{
 
         stage('Checkout') {
             steps {
-                catchError { buildResult: 'SUCCESS', stageResult: 'FAILURE' 
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') { 
                 // This is accessing credentials of type usernamePassword
                 withCredentials([usernamePassword(credentialsId: 'slave_ssh', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]){
                     echo "$GIT_USERNAME"
@@ -17,7 +17,7 @@ pipeline{
 
         stage('Checkout1') {
             steps {
-                catchError { buildResult: 'SUCCESS', stageResult: 'FAILURE'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                 //This is accessing credentials of type secret text
                 withCredentials([string(credentialsId: 'secret_text', variable: 'SECRET_TEXT')]) {
                     echo "secret text : $SECRET_TEXT"
@@ -29,7 +29,7 @@ pipeline{
 
         stage('Checkout2') {
             steps {
-                catchError { buildResult: 'SUCCESS', stageResult: 'FAILURE'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                 //This is accessing credentials of type secret file
                 withCredentials([file(credentialsId: 'secret_file', variable: 'FILE_PATH')]) {
                     echo "file path: $FILE_PATH"
@@ -45,7 +45,7 @@ pipeline{
 
         stage('Checkout3') {
             steps {
-                catchError { buildResult: 'SUCCESS', stageResult: 'FAILURE'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                 //This is accessing credentials of type sshUserPrivateKey
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh_pem', usernameVariable: 'USER', keyFileVariable: 'SSH_KEY')]) {
                     echo "usernameVariable: $USER"
