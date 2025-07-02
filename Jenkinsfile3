@@ -4,34 +4,29 @@ pipeline{
     stages {
 
         stage('Checkout') {
-            when {
-                expression { 
-                    params.CHECKOUT == true
-                    } // Only run this stage if Checkout parameter is true
-            }
             steps {
                 // This is accessing credentials of type usernamePassword
-                withcredentials([usernamePassword(credentialsId: 'slave_ssh', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')])
+                withCredentials([usernamePassword(credentialsId: 'slave_ssh', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')])
                     echo "$GIT_USERNAME"
                     echo "$GIT_PASSWORD"
         }
-        }
+    }
 
         stage('Checkout1') {
             steps {
                 //This is accessing credentials of type secret text
-                withcredentials([string(credentialsId: 'secret_text', variable: 'SECRET_TEXT')]) {
-                    echo "SSH User: $SECRET_TEXT"
+                withCredentials([string(credentialsId: 'secret_text', variable: 'SECRET_TEXT')]) {
+                    echo "secret text : $SECRET_TEXT"
             }
 
         }
-        }
+    }
 
         stage('Checkout2') {
             steps {
                 //This is accessing credentials of type secret file
-                withcredentials([file(credentialsId: 'secret_file', variable: 'FILE_PATH')]) {
-                    echo "SSH User: $FILE_PATH"
+                withCredentials([file(credentialsId: 'secret_file', variable: 'FILE_PATH')]) {
+                    echo "file path: $FILE_PATH"
                     sh '''
                         echo "Contents of the file:"
                         cat $FILE_PATH
@@ -39,18 +34,18 @@ pipeline{
             }
 
         }
-        }    
+    }    
 
         stage('Checkout3') {
             steps {
                 //This is accessing credentials of type sshUserPrivateKey
-                withcredentials([sshUserPrivateKey(credentialsId: 'ssh_pem', usernameVariable: 'USER', keyFileVariable: 'SSH_KEY')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh_pem', usernameVariable: 'USER', keyFileVariable: 'SSH_KEY')]) {
                     echo "usernameVariable: $USER"
                     echo "keyFileVariable: $SSH_KEY"
             }
 
         }
-        }     
+    }     
 
         }
   }
