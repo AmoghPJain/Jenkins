@@ -1,43 +1,8 @@
 pipeline{
     agent any
 
-    parameters {
-        booleanParam(name: 'CLEANUP', defaultValue: false, description: 'Delete workspace before build')
-        booleanParam(name: 'FAIL', defaultValue: false, description: 'Fail scenario')
-        booleanParam(name: 'CHECKOUT', defaultValue: true, description: 'code checkout stage')
-        booleanParam(name: 'BUILD', defaultValue: true, description: 'Build stage')
-        
-    }
-
     stages {
-        stage('Cleanup'){
-            when {
-                expression { 
-                    params.CLEANUP == true
-                    } // Only run this stage if Cleanup parameter is true
-            }
-            steps {
-                deleteDir() // Cleans the workspace before starting the build
-                echo 'Workspace cleaned up'
-            }
-        }
 
-        stage('Fail'){
-            when {
-                expression { 
-                    params.FAIL == true
-                    } // Only run this stage if Fail parameter is true
-            }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh '''
-                        sleep 10
-                        echo "Simulating an error..."
-                        exit 1 # This will cause the stage to fail, but the pipeline will continue
-                    '''
-                }
-            }
-        }
         stage('Checkout') {
             when {
                 expression { 
@@ -45,46 +10,47 @@ pipeline{
                     } // Only run this stage if Checkout parameter is true
             }
             steps {
-                checkout(
-                    changelog: false,
-                    scm: [$class: 'GitSCM',
-                        branches: [[name: 'master']],
-                        userRemoteConfigs: [[
-                            credentialsId: 'slave_ssh',
-                            url: 'https://github.com/AmoghPJain/simple-java-maven-app.git' 
-                           ]],
-                           extensions: [[$class: 'CloneOption', timeout: 60]] // Clones the repository with a timeout of 60 seconds
-                    ]
-                    )
-            }
+                // This is accessing credentials of type usernamePassword
+                withcredentials([usernamePassword(credentialsId: 'slave_ssh', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')])
+                    echo "$GIT_USERNAME"
+                    echo "$GIT_PASSWORD"
+        }
         }
 
-        stage('Build') {
-            when{
-                expression { 
-                    params.BUILD == true
-                    } // Only run this stage if Build parameter is true
-            }
+        stage('Checkout1') {
             steps {
-                sh '''
-                    echo "Building the project..."
-                    pwd
-                    ls -l
-                    mvn --version
-                    mvn clean install
-                '''
+                //This is accessing credentials of type secret text
+                withcredentials([string(credentialsId: 'secret_text', variable: 'SECRET_TEXT')]) {
+                    echo "SSH User: $SECRET_TEXT"
             }
+
         }
-        stage('checkout'){
+        }
+
+        stage('Checkout2') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'slave_ssh', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                    checkout(
-                        changelog: false,
-                        scm: [$class: 'GitSCM',
-                            branches: [[name: 'main']],
-                            userRemoteConfigs: [[
-                                credentialsId: 'slave_ssh',
-                                url: '
+                //This is accessing credentials of type secret file
+                withcredentials([file(credentialsId: 'secret_file', variable: 'FILE_PATH')]) {
+                    echo "SSH User: $FILE_PATH"
+                    sh '''
+                        echo "Contents of the file:"
+                        cat $FILE_PATH
+                    '''
+            }
+
+        }
+        }    
+
+        stage('Checkout3') {
+            steps {
+                //This is accessing credentials of type sshUserPrivateKey
+                withcredentials([sshUserPrivateKey(credentialsId: 'ssh_pem', usernameVariable: 'USER', keyFileVariable: 'SSH_KEY')]) {
+                    echo "usernameVariable: $USER"
+                    echo "keyFileVariable: $SSH_KEY"
+            }
+
+        }
+        }     
+
         }
   }
-}    
