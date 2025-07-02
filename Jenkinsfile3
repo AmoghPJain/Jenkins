@@ -12,6 +12,7 @@ pipeline{
                     echo "$GIT_PASSWORD"
                     sh '''
                         git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/AmoghPJain/Python.git
+                        ls
                     '''
             }
             }
@@ -21,7 +22,7 @@ pipeline{
         stage('Checkout1') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                //This is accessing credentials of type secret text
+                //This is accessing credentials of type secret text. Used mostly for API keys or tokens
                 withCredentials([string(credentialsId: 'secret_text', variable: 'SECRET_TEXT')]) {
                     echo "secret text : $SECRET_TEXT"
             }
@@ -33,7 +34,7 @@ pipeline{
         stage('Checkout2') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                //This is accessing credentials of type secret file
+                //This is accessing credentials of type secret file. Usually used for files like pem files, certificates, etc.
                 withCredentials([file(credentialsId: 'secret_file', variable: 'FILE_PATH')]) {
                     echo "file path: $FILE_PATH"
                     sh '''
@@ -49,10 +50,11 @@ pipeline{
         stage('Checkout3') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                //This is accessing credentials of type sshUserPrivateKey
+                //This is accessing credentials of type sshUserPrivateKey. This contains pem file contents.
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh_pem', usernameVariable: 'USER', keyFileVariable: 'SSH_KEY')]) {
                     echo "usernameVariable: $USER"
                     echo "keyFileVariable: $SSH_KEY"
+                //example: scp -o StrictHostKeyChecking=no -i $SSH_KEY ./build.zip $USER@remote-server:/opt/deployments/
             }
             }
         }
